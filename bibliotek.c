@@ -25,14 +25,69 @@ struct Buch
 };
 
 
+struct Kaufen
+{
+    struct Student *student;
+    struct Buch *buch;
+};
+
+
+
 const int STUDENTS_MAX = 100;
 const int BUECHER_MAX = 100;
 int student_zaehler = 0;
 int buch_zaehler = 0;
+int kauf_zaehler = 0;
 
 struct Student studenten[STUDENTS_MAX];
 struct Buch buecher[BUECHER_MAX];
+struct Kaufen kauf_list[BUECHER_MAX];
 
+
+int ist_buch_verkauft(Buch buch)
+{
+    for (int i = 0; i<kauf_zaehler;i++)
+        if (kauf_list[i].buch == &buch)
+            return 1;
+    return 0;
+
+}
+
+
+void fuehre_kaufprozess_aus(struct Student student, struct Buch buch)
+{
+    if (kauf_zaehler >= BUECHER_MAX)
+    {
+        printf("Leider gibt es kein Buecher mehr zu verkaufen");
+        return;
+    }
+    if(ist_buch_verkauft(buch))
+    {
+        printf("Leider dies Buch ist schon gekauft! \n");
+        return;
+    }
+    kauf_list[kauf_zaehler].student = &student;
+    kauf_list[kauf_zaehler].buch = &buch;
+    printf("Verkauf prozess wird erfogreich durschgefuehrt \n");
+    kauf_zaehler++;
+}
+
+void print_buch(Buch buch)
+{
+    printf("Buch: id: %d, Title: %s, Autor: %s, Price: %d \n", buch.id, buch.title, buch.autor, buch.price);
+}
+
+void zeig_gekaufte_buecher_von_student(struct Student student)
+{   
+    printf("Dieser Student hat folgende Buecher gekauft:");
+    for (int i=0; i<kauf_zaehler;i++)
+    {
+        if (kauf_list[i].student == &student)
+        {
+            print_buch(*kauf_list[i].buch);
+        }
+    }
+}
 
 void student_einfuegen(int id, char name[50], int alt)
 {
@@ -60,6 +115,8 @@ void buch_einfuegen(int id, char title[50], char autor[50], int price)
     buch_zaehler++;
 
 }
+
+
 
 void alle_buecher_zeigen()
 {
