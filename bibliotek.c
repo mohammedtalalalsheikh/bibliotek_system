@@ -44,7 +44,7 @@ struct Buch buecher[BUECHER_MAX];
 struct Kaufen kauf_list[BUECHER_MAX];
 
 
-int ist_buch_verkauft(Buch buch)
+int ist_buch_verkauft(struct Buch buch)
 {
     for (int i = 0; i<kauf_zaehler;i++)
         if (kauf_list[i].buch == &buch)
@@ -72,7 +72,7 @@ void fuehre_kaufprozess_aus(struct Student student, struct Buch buch)
     kauf_zaehler++;
 }
 
-void print_buch(Buch buch)
+void print_buch(struct Buch buch)
 {
     printf("Buch: id: %d, Title: %s, Autor: %s, Price: %d \n", buch.id, buch.title, buch.autor, buch.price);
 }
