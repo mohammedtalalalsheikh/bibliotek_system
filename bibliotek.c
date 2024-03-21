@@ -44,17 +44,17 @@ struct Buch buecher[BUECHER_MAX];
 struct Kaufen kauf_list[BUECHER_MAX];
 
 
-int ist_buch_verkauft(struct Buch buch)
+int ist_buch_verkauft(struct Buch *buch)
 {
     for (int i = 0; i<kauf_zaehler;i++)
-        if (kauf_list[i].buch == &buch)
+        if (kauf_list[i].buch == buch)
             return 1;
     return 0;
 
 }
 
 
-void fuehre_kaufprozess_aus(struct Student student, struct Buch buch)
+void fuehre_kaufprozess_aus(struct Student *student, struct Buch *buch)
 {
     if (kauf_zaehler >= BUECHER_MAX)
     {
@@ -66,8 +66,8 @@ void fuehre_kaufprozess_aus(struct Student student, struct Buch buch)
         printf("Leider dies Buch ist schon gekauft! \n");
         return;
     }
-    kauf_list[kauf_zaehler].student = &student;
-    kauf_list[kauf_zaehler].buch = &buch;
+    kauf_list[kauf_zaehler].student = student;
+    kauf_list[kauf_zaehler].buch = buch;
     printf("Verkauf prozess wird erfogreich durschgefuehrt \n");
     kauf_zaehler++;
 }
@@ -77,12 +77,18 @@ void print_buch(struct Buch buch)
     printf("Buch: id: %d, Title: %s, Autor: %s, Price: %d \n", buch.id, buch.title, buch.autor, buch.price);
 }
 
-void zeig_gekaufte_buecher_von_student(struct Student student)
-{   
-    printf("Dieser Student hat folgende Buecher gekauft:");
+void print_student(struct Student student)
+{
+    printf("Student: %d %s %d \n", student.id, student.name, student.alt);
+}
+
+void zeig_gekaufte_buecher_von_student(struct Student *student)
+{
+    printf("Dieser Student %s hat folgende Buecher gekauft:\n", student->name);
     for (int i=0; i<kauf_zaehler;i++)
     {
-        if (kauf_list[i].student == &student)
+
+        if (kauf_list[i].student == student)
         {
             print_buch(*kauf_list[i].buch);
         }
@@ -138,7 +144,14 @@ int main(){
     buch_einfuegen(1, "See of lions", "Sami", 90);
     buch_einfuegen(2, "Bridge of Fire", "Michel", 120);
     buch_einfuegen(3, "Wolf of the king", "rami", 60);
-
+    
+    
+    fuehre_kaufprozess_aus(&studenten[0], &buecher[2]);
+    fuehre_kaufprozess_aus(&studenten[0], &buecher[1]);
+    zeig_gekaufte_buecher_von_student(&studenten[0]);
+    
+    
+    
 
     alle_studenten_zeigen();
     alle_buecher_zeigen();
