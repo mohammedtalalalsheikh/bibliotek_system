@@ -131,6 +131,8 @@ void zu_ausleihn(struct Student *student, struct Buch *buch)
         {
             ausleihn_list[i].student = student;
             ausleihn_list[i].buch = buch;
+            printf("Prozess wurde erfogreich durschgefuehrt\n");
+            return;
         }
     }
 
@@ -204,27 +206,42 @@ void zeig_gekaufte_buecher_von_student(struct Student *student)
 
 void student_einfuegen(int id, char name[50], int alt)
 {
+    if (student_zaehler >= STUDENTS_MAX)
+    {
+        printf("Leider es gibt nicht mehr plaetze\n");
+        return;
+    }
+
     studenten[student_zaehler].id = id;
     strcpy(studenten[student_zaehler].name, name);
     studenten[student_zaehler].alt = alt;
+    printf("Prozess wurde erfogreich durschgefuehrt\n");
     student_zaehler++;
 }
 
 void alle_studenten_zeigen()
-{
+{   
+    printf("Es gibt die folgende Studenten\n");
     for (int i=0;i<student_zaehler;i++)
     {
-        printf("Student: %d %s %d \n", studenten[i].id, studenten[i].name, studenten[i].alt);
+        printf("%d. Student: %d %s %d \n", i, studenten[i].id, studenten[i].name, studenten[i].alt);
     }
 }
 
 
 void buch_einfuegen(int id, char title[50], char autor[50], int price)
 {
+    if (buch_zaehler >= BUECHER_MAX)
+    {
+        printf("Leider es gibt nicht mehr plaetze\n");
+        return;
+
+    }
     buecher[buch_zaehler].id = id;
     strcpy(buecher[buch_zaehler].title, title);
     strcpy(buecher[buch_zaehler].autor, autor);
     buecher[buch_zaehler].price = price;
+    printf("Prozess wurde erfogreich durschgefuehrt\n");
     buch_zaehler++;
 
 }
@@ -232,10 +249,11 @@ void buch_einfuegen(int id, char title[50], char autor[50], int price)
 
 
 void alle_buecher_zeigen()
-{
+{   
+    printf("Es gibt die folgende Buecher\n");
     for (int i=0;i<buch_zaehler;i++)
     {
-        printf("Buch: id: %d, Title: %s, Autor: %s, Price: %d \n", buecher[i].id, buecher[i].title, buecher[i].autor, buecher[i].price);
+        printf("%d. Buch: id: %d, Title: %s, Autor: %s, Price: %d \n", i, buecher[i].id, buecher[i].title, buecher[i].autor, buecher[i].price);
     }
 }
 
@@ -243,7 +261,6 @@ void alle_buecher_zeigen()
 int main(){
 
     werte_von_zeigers_null_stellen();
-
 
     student_einfuegen(0, "Ahmad", 20);
     student_einfuegen(1, "Baker", 25);
@@ -255,53 +272,131 @@ int main(){
     buch_einfuegen(3, "Wolf of the king", "rami", 60);
     
     
-    fuehre_kaufprozess_aus(&studenten[0], &buecher[2]);
-    fuehre_kaufprozess_aus(&studenten[0], &buecher[1]);
-    zeig_gekaufte_buecher_von_student(&studenten[0]);
+    // fuehre_kaufprozess_aus(&studenten[0], &buecher[2]);
+    // fuehre_kaufprozess_aus(&studenten[0], &buecher[1]);
+    // zeig_gekaufte_buecher_von_student(&studenten[0]);
     
-    alle_studenten_zeigen();
-    alle_buecher_zeigen();  
-    printf("\n\nTEST Ausleihn:\n");
-    zu_ausleihn(&studenten[0], &buecher[1]);
-    zu_ausleihn(&studenten[0], &buecher[1]);
+    // alle_studenten_zeigen();
+    // alle_buecher_zeigen();  
+    // printf("\n\nTEST Ausleihn:\n");
+    // zu_ausleihn(&studenten[0], &buecher[1]);
+    // zu_ausleihn(&studenten[0], &buecher[1]);
     
-    zeig_was_student_ausgeliehn(&studenten[0]);
+    // zeig_was_student_ausgeliehn(&studenten[0]);
 
-    rueckgibt_was_student_ausgeliehn(&studenten[0]);
+    // rueckgibt_was_student_ausgeliehn(&studenten[0]);
 
-    zeig_was_student_ausgeliehn(&studenten[0]);
+    // zeig_was_student_ausgeliehn(&studenten[0]);
+
+
+
+    while(1)
+    {
+        int auswahl;
+        printf("\n\nMenu: \n");
+        printf("Was moechten Sie machen. Bitte ein Wert eingeben:\n");
+        printf("1. Um ein Student hinzufuegen.\n");
+        printf("2. Um ein Buch hinzufuegen.\n");
+        printf("3. Um ein Kaufprozess ausfuehren.\n");
+        printf("4. Um ein Ausleihnprozess ausfuehren.\n");
+        printf("5. Um ein Rueckgabprozess ausfuehren.\n");
+        printf("6. Um ein gekaufte Buecher von ein Student zu zeigen.\n");
+        printf("7. Um ein ausgeliene Buecher von ein Student zu zeigen.\n");
+        scanf("%d", &auswahl);
+
+        printf("auswahl %d\n", auswahl);
+
+        switch(auswahl){
+        case 1:{
+            int id, alt;
+            char name[50];
+            printf("Bitte eine Id eingeben \n");
+            scanf("%d", &id);
+            printf("Bitte eine Name eingeben \n");
+            scanf("%s", name);
+            printf("Bitte eine alt werte eingeben \n");
+            scanf("%d", &alt);
+            student_einfuegen(id, name, alt);
+            alle_studenten_zeigen();
+            break;
+            }
+
+        case 2:{
+            int id, price;
+            char title[50], autor[50];
+            printf("Bitte eine Id eingeben \n");
+            scanf("%d", &id);
+            printf("Bitte eine Title eingeben \n");
+            scanf("%s", title);
+            printf("Bitte eine autor eingeben \n");
+            scanf("%s", autor);
+            printf("Bitte eine price eingeben \n");
+            scanf("%d", &price);
+            buch_einfuegen(id, title, autor, price);
+            alle_buecher_zeigen();
+            break;
+        }
+
+        case 3:{
+            printf("\nBitte waehlen Sie ein Index von Student aus:\n");
+            alle_studenten_zeigen();
+            int s;
+            scanf("%d", &s);
+
+            printf("\nBitte waehlen Sie ein Index von Buch aus:\n");
+            alle_buecher_zeigen();
+            int b;
+            scanf("%d", &b);
+            fuehre_kaufprozess_aus(&studenten[s], &buecher[b]);
+            break;
+        }
+
+        case 4:{
+            printf("\nBitte waehlen Sie ein Index von Student aus:\n");
+            alle_studenten_zeigen();
+            int s;
+            scanf("%d", &s);
+
+            printf("\nBitte waehlen Sie ein Index von Buch aus:\n");
+            alle_buecher_zeigen();
+            int b;
+            scanf("%d", &b);
+            zu_ausleihn(&studenten[s], &buecher[b]);
+            break;
+            }
+        case 5:{
+            printf("\nBitte waehlen Sie ein Index von Student aus:\n");
+            alle_studenten_zeigen();
+            int s;
+            scanf("%d", &s);
+            rueckgibt_was_student_ausgeliehn(&studenten[s]);
+            break;
+        }
+        case 6:{
+
+            printf("\nBitte waehlen Sie ein Index von Student aus:\n");
+            alle_studenten_zeigen();
+            int s;
+            scanf("%d", &s);
+
+            zeig_gekaufte_buecher_von_student(&studenten[s]);
+            break;
+        }
+
+        case 7:{
+
+        
+            printf("\nBitte waehlen Sie ein Index von Student aus:\n");
+            alle_studenten_zeigen();
+            int s;
+            scanf("%d", &s);
+
+            zeig_was_student_ausgeliehn(&studenten[s]);
+            break;
+        }
+        }
+    }
+
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
